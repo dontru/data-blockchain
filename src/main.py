@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 
-from .Block import Block
-from .BlockchainDB import BlockchainDB
+from blockchain import Block
+from blockchain import BlockchainDB
 
-# uvicorn blockchain.API:app --reload
+# uvicorn main:app --reload
 app = FastAPI()
 db = BlockchainDB('Blockchain.SQLite3')
 
