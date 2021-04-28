@@ -1,2 +1,10 @@
 # Python 3.8.8
+
+# pip install fastapi
 fastapi~=0.63.0
+
+# pip install uvicorn[standard]
+uvicorn~=0.13.4
+
+# pip install Jinja2
+jinja2~=2.11.3
