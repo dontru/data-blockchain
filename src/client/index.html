@@ -6,21 +6,31 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-  <div id="app">
+  {% raw %}<div id="app">
     <input v-model="hash">
     <button v-on:click="getBlock">Get Block</button>
-  </div>
+    <p v-if="block">
+      <span v-if="block.previous_hash">
+        Previous Hash: {{ block.previous_hash }}<br>
+      </span>
+      Date: {{
+        new Date(block.timestamp * 1000).toLocaleString()
+      }} | Index: {{ block.index }} | Proof: {{ block.proof }}<br>
+      {{ block.data }}
+    </p>
+  </div>{% endraw %}
 
   <script>
     var app = new Vue({
       el: '#app',
       data: {
-        hash: ''
+        hash: '',
+        block: null
       },
       methods: {
         getBlock: function() {
           axios.get("/block/" + this.hash).then((response) => {
-            console.log(response.data)
+            this.block = response.data.block
           })
         }
       }
