@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
 
 from blockchain import Block
 from blockchain import BlockchainDB
@@ -6,6 +7,12 @@ from blockchain import BlockchainDB
 # uvicorn main:app --reload
 app = FastAPI()
 db = BlockchainDB('Blockchain.SQLite3')
+templates = Jinja2Templates(directory='client')
+
+
+@app.get("/")
+def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/block/{block_hash}")
