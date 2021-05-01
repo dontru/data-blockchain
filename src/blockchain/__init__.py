@@ -1,2 +1,2 @@
 from .Block import Block
-from .BlockchainDB import BlockchainDB
+from .DB import DB

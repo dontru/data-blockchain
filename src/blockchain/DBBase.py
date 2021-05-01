@@ -4,7 +4,7 @@ from typing import Optional
 from .Block import Block
 
 
-class BlockchainDB:
+class DBBase:
     CREATE_BLOCKS = 'CREATE TABLE Blocks (hash CHARACTER(64), ' \
                     'previous_hash CHARACTER(64), idx INT, timestamp DOUBLE, data TEXT, proof INT)'
 
