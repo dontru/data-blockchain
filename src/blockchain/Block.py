@@ -34,3 +34,6 @@ class Block:
 
     def __str__(self):
         return json.dumps(self.__dict__)
+
+    def date(self, format='%Y-%m-%d %H:%M') -> str:
+        return time.strftime(format, time.localtime(self.timestamp))
