@@ -1,4 +1,4 @@
-# Python 3.8.8
+# Python 3.9.4
 
 # pip install fastapi
 fastapi~=0.63.0
@@ -6,5 +6,8 @@ fastapi~=0.63.0
 # pip install uvicorn[standard]
 uvicorn~=0.13.4
 
-# pip install Jinja2
+# pip install jinja2
 jinja2~=2.11.3
+
+# pip install aiofiles
+aiofiles~=0.6.0

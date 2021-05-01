@@ -1,46 +1,40 @@
 from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from blockchain import Block
-from blockchain import BlockchainDB
+import blockchain
 
-# uvicorn main:app --reload
+
 app = FastAPI()
-db = BlockchainDB('Blockchain.SQLite3')
-templates = Jinja2Templates(directory='client')
+db = blockchain.DB('Blockchain.SQLite3')
+templates = Jinja2Templates(directory='templates')
 
 
-@app.get("/")
-def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+@app.get("/get/{block_hash}", response_class=HTMLResponse)
+def get(request: Request, block_hash: str):
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "blockchain": db.get_blockchain(block_hash)
+    })
 
 
-@app.get("/block/{block_hash}")
+@app.get("/api/block/{block_hash}")
 def get_block(block_hash: str):
     return {"block": db.get(block_hash)}
 
 
-@app.get("/blockchain/{block_hash}")
+@app.get("/api/blockchain/{block_hash}")
 def get_blockchain(block_hash: str):
-    blockchain = []
-    while block := db.get(block_hash):
-        blockchain.insert(0, block)
-        block_hash = block.previous_hash
-    return {"blockchain": blockchain}
+    return {"blockchain": db.get_blockchain(block_hash)}
 
 
-@app.post("/add_genesis/{data}")
+@app.post("/api/add_genesis/{data}")
 def add_genesis(data: str):
-    db.add(block := Block.genesis(data))
+    block = db.add_genesis(data)
     return {"block_hash": block.hexdigest()}
 
 
-@app.post("/add_block/{previous_hash}/{data}")
+@app.post("/api/add_block/{previous_hash}/{data}")
 def add_block(previous_hash: str, data: str):
-    previous = db.get(previous_hash)
-    if previous is not None:
-        db.add(block := Block.create(previous, data))
-        block_hash = block.hexdigest()
-    else:
-        block_hash = None
-    return {"block_hash": block_hash}
+    block = db.add_block(previous_hash, data)
+    return {"block_hash": block.hexdigest() if block is not None else None}

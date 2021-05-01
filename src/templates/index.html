@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+  {% for block in blockchain %}
+    {{ block.index }} | {{ block.date() }} | Proof: {{ block.proof }}
+    {% if block.previous_hash != "" %}
+      | Previous Hash: <a href="/get/{{ block.previous_hash }}">{{ block.previous_hash[:7] }}...</a>
+    {% endif %}<br>
+    {{ block.data }}<br><br>
+  {% endfor %}
+</body>
+</html>
