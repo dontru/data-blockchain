@@ -2,32 +2,57 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>data-blockchain</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+  <style>body { margin-top: 8px }</style>
 </head>
 <body>
-  <form action="/get" method="post">
-    <input type="text" name="block_hash" value="{{ block_hash }}" autocomplete="off">
-    <button type="submit">Get</button>
-  </form>
-  {% if blockchain %}
-    {% for block in blockchain %}
-      {{ block.index }} | {{ block.date() }} | Proof: {{ block.proof }}
-      {% if block.previous_hash != "" %}
-        | Previous Hash: <a href="/get/{{ block.previous_hash }}">{{ block.previous_hash[:7] }}...</a>
-      {% endif %}<br>
-      {{ block.data }}<br><br>
-    {% endfor %}
-    <form action="/add" method="post">
-      <input type="hidden" name="previous_hash" value="{{ block_hash }}" autocomplete="off">
-      <textarea name="data"></textarea><br>
-      <button type="submit">Add</button>
+  <div class="container">
+    <h1>data-blockchain</h1>
+
+    <form action="/get" method="post">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Hash" name="block_hash" value="{{ block_hash }}" autocomplete="off">
+        <div class="input-group-append"><button type="submit" class="btn btn-primary">Get</button></div>
+      </div>
     </form>
     <hr>
-  {% endif %}
-  Add genesis
-  <form action="/add" method="post">
+
+    {% if blockchain %}
+      <ul class="list-group">
+        {% for block in blockchain %}
+        <li class="list-group-item">
+          <span class="badge bg-dark">{{ block.index }}</span>
+          <span class="badge bg-primary">{{ block.date() }}</span>
+          <span class="badge bg-success">Proof: {{ block.proof }}</span>
+          {% if block.previous_hash != "" %}
+            <span class="badge bg-secondary">Previous Hash: {{ block.previous_hash }}</span>
+          {% endif %}<br>
+          {{ block.data }}
+        </li>
+        {% endfor %}
+
+        <li class="list-group-item">
+          <form action="/add" method="post">
+            <input type="hidden" name="previous_hash" value="{{ block_hash }}" autocomplete="off">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Data for the next block" name="data" autocomplete="off">
+              <div class="input-group-append"><button type="submit" class="btn btn-primary">Add</button></div>
+            </div>
+          </form>
+        </li>
+      </ul>
+      <hr>
+    {% endif %}
+
+    <form action="/add" method="post">
       <input type="hidden" name="previous_hash" value="GENESIS" autocomplete="off">
-      <textarea name="data"></textarea><br>
-      <button type="submit">Add</button>
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Data for the new blockchain" name="data" autocomplete="off">
+        <div class="input-group-append"><button type="submit" class="btn btn-primary">Create</button></div>
+      </div>
     </form>
+  </div>
 </body>
 </html>
