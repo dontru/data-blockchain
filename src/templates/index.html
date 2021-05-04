@@ -4,12 +4,30 @@
   <meta charset="utf-8">
 </head>
 <body>
-  {% for block in blockchain %}
-    {{ block.index }} | {{ block.date() }} | Proof: {{ block.proof }}
-    {% if block.previous_hash != "" %}
-      | Previous Hash: <a href="/get/{{ block.previous_hash }}">{{ block.previous_hash[:7] }}...</a>
-    {% endif %}<br>
-    {{ block.data }}<br><br>
-  {% endfor %}
+  <form action="/get" method="post">
+    <input type="text" name="block_hash" value="{{ block_hash }}" autocomplete="off">
+    <button type="submit">Get</button>
+  </form>
+  {% if blockchain %}
+    {% for block in blockchain %}
+      {{ block.index }} | {{ block.date() }} | Proof: {{ block.proof }}
+      {% if block.previous_hash != "" %}
+        | Previous Hash: <a href="/get/{{ block.previous_hash }}">{{ block.previous_hash[:7] }}...</a>
+      {% endif %}<br>
+      {{ block.data }}<br><br>
+    {% endfor %}
+    <form action="/add" method="post">
+      <input type="hidden" name="previous_hash" value="{{ block_hash }}" autocomplete="off">
+      <textarea name="data"></textarea><br>
+      <button type="submit">Add</button>
+    </form>
+    <hr>
+  {% endif %}
+  Add genesis
+  <form action="/add" method="post">
+      <input type="hidden" name="previous_hash" value="GENESIS" autocomplete="off">
+      <textarea name="data"></textarea><br>
+      <button type="submit">Add</button>
+    </form>
 </body>
 </html>
