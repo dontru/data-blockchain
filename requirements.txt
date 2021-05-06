@@ -9,8 +9,5 @@ uvicorn~=0.13.4
 # pip install jinja2
 jinja2~=2.11.3
 
-# pip install aiofiles
-aiofiles~=0.6.0
-
 # pip install python-multipart
 python-multipart~=0.0.5

@@ -17,7 +17,6 @@ def get(request: Request):
 
 @app.post("/get", response_class=HTMLResponse)
 def get(request: Request, block_hash: str = Form(...)):
-    print("get block_hash", block_hash)
     return templates.TemplateResponse("index.html", {
         "request": request,
         "blockchain": db.get_blockchain(block_hash),
